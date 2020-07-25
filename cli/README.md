@@ -124,7 +124,7 @@ Kubernetes documentation.
 ---
 
 ### Exercise: Using Contexts
-**Objective:** Create a new context called `minidev` and switch to it.
+**Objective:** Create a new context called `k8s-101` and switch to it.
 
 ---
 
@@ -133,10 +133,10 @@ Kubernetes documentation.
 $ kubectl config get-contexts
 ```
 
-2. Create a new context called `minidev` within the `minikube` cluster with the `dev` namespace, as the
-`minikube` user.
+2. Create a new context called `k8s-101` within the `digitalocean` cluster with the your namespace, as the
+`do-admin` user.
 ```
-$ kubectl config set-context minidev --cluster=minikube --user=minikube --namespace=dev
+$ kubectl config set-context k8s-101 --cluster=digitalocean --user=do-amdin --namespace=<your-name>
 ```
 
 3. View the newly added context.
@@ -144,9 +144,9 @@ $ kubectl config set-context minidev --cluster=minikube --user=minikube --namesp
 kubectl config get-contexts
 ```
 
-4. Switch to the `minidev` context using `use-context`.
+4. Switch to the `k8s-101` context using `use-context`.
 ```
-$ kubectl config use-context minidev
+$ kubectl config use-context k8s-101
 ```
 
 5. View the current active context.
@@ -365,13 +365,13 @@ $ kubectl logs mypod
 **Objective:** Explore the basics. Create a namespace, a pod, then use the `kubectl` commands to describe and delete
 what was created.
 
-**NOTE:** You should still be using the `minidev` context created earlier.
+**NOTE:** You should still be using the `k8s-101` context created earlier.
 
 ---
 
-1) Create the `dev` namespace.
+1) Create the your namespace.
 ```
-kubectl create namespace dev
+kubectl create namespace <your-name>
 ```
 
 2) Apply the manifest `manifests/mypod.yaml`.
@@ -590,7 +590,7 @@ $ kubectl proxy
 
 3) Access the Pod through the proxy.
 ```
-http://127.0.0.1:8001/api/v1/namespaces/dev/pods/mypod/proxy/
+http://127.0.0.1:8001/api/v1/namespaces/<your-name>/pods/mypod/proxy/
 ```
 You should see the "Welcome to nginx!" page.
 
@@ -627,8 +627,8 @@ The namespace and context will be reused.
 
 To remove everything that was created in this tutorial, execute the following commands:
 ```
-kubectl delete namespace dev
-kubectl config delete-context minidev
+kubectl delete namespace <your-name>
+kubectl config delete-context k8s-101
 ```
 
 ---
