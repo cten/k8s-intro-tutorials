@@ -99,6 +99,12 @@ View the created ConfigMap.
 $ kubectl get cm file-example -o yaml
 ```
 
+View values in secrets. Remember stored Base64 encoded, change `base64` command according to your OS.
+```
+kubectl get secret manifest-example -ojsonpath='{.data.password}'
+kubectl get secret manifest-example -ojsonpath='{.data.password}' | base64 -D -
+```
+
 **Note:** When creating a ConfigMap from a file or directory the content will assume to be multiline as signified by 
 the pipe symbol (`|`) in the yaml.
 
