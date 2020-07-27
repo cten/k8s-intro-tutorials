@@ -546,7 +546,6 @@ http://<proxy_address>/api/v1/namespaces/<namespace>/<services|pod>/<service_nam
 **Example**
 ```
 http://127.0.0.1:8001/api/v1/namespaces/default/pods/mypod/proxy/
-http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/
 ```
 ---
 
@@ -558,18 +557,12 @@ a handy tool to quickly explore the system. **However**, it should not be relied
 ![Kubernetes Dashboard](images/dashboard.png)
 
 To access the dashboard use the `kubectl proxy` command and access the `kubernetes-dashboard` service within the
-`kube-system` namespace.
+`kubernetes-dashboard` namespace.
 ```
-http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/
+http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 ```
 
-Leaving the proxy up and going may not be desirable for quick dev-work. Minikube itself has a command that will
-open the dashboard up in a new browser window through an exposed service on the Minikube VM.
-
-**Command**
-```
-$ minikube dashboard
-```
+Leaving the proxy up and going may not be desirable for quick dev-work.
 
 ---
 
@@ -597,14 +590,8 @@ You should see the "Welcome to nginx!" page.
 
 4) Access the Dashboard through the proxy.
 ```
-http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/
+http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 ```
-
-5) Lastly, stop the proxy (`CTRL+C`) and access the Dashboard through minikube.
-```
-$ minikube dashboard
-```
-Minikube offers a convenient shortcut to access the dashboard (without the proxy) for local development use.
 
 ---
 
