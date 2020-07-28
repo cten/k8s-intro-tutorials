@@ -136,7 +136,7 @@ $ kubectl config get-contexts
 2. Create a new context called `k8s-101` within the `digitalocean` cluster with the your namespace, as the
 `do-admin` user.
 ```
-$ kubectl config set-context k8s-101 --cluster=digitalocean --user=do-amdin --namespace=<your-name>
+$ kubectl config set-context k8s-101 --cluster=digitalocean --user=do-admin --namespace=<your-name>
 ```
 
 3. View the newly added context.
