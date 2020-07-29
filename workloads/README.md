@@ -5,10 +5,20 @@ Workloads within Kubernetes are higher level objects that manage Pods or other h
 In **ALL CASES** a Pod Template is included, and acts as the base tier of management.
 
 **Note:** 
-1) If you are coming directly from the previous tutorials (core), you may still be configured to use the
-`minidev` context. Switch to the `minikube` context before proceeding with the rest of the tutorials.
+1) Make sure you are still using the k8s-101 context, remember to replace `<your-name>` in all commands:
 
-2) Unlike some of the other tutorials, the workload exercises should be cleaned up before moving onto the next
+    ```bash
+    kubectl config set-context k8s-101 --cluster=digitalocean --user=do-admin --namespace=<your-name>
+    kubectl config use-context k8s-101
+    ```
+
+2) Create your namespace (if it was deleted previously): 
+
+    ```bash
+    kubectl create ns <your-name>
+    ````
+
+3) Unlike some of the other tutorials, the workload exercises should be cleaned up before moving onto the next
  workload type. The clean-up commands will included after **Summary** section of the exercise.
 
 # Index
@@ -252,7 +262,7 @@ Look at the `Controlled By` field. It will contain a reference to the parent Rep
 Now that the relationship from Deployment to ReplicaSet to Pod is understood. It is time to update the
 `deploy-example` and see an update in action.
 
-7) Update the `deploy-example` manifest and add a few additional labels to the Pod template. Once done, apply the
+7) Update the `deploy-example` manifest and add a few additional labels to the **Pod** template. Once done, apply the
 change with the `--record` flag.
 ```
 $ kubectl apply -f manifests/deploy-example.yaml --record
@@ -418,9 +428,10 @@ $ kubectl get daemonset
 ```
 As there are no matching nodes, no Pods should be scheduled.
 
-3) Label the `minikube` node with `nodeType=edge`
+3) Label the a node with `nodeType=edge`
 ```
-$ kubectl label node minikube nodeType=edge
+$ kubectl get nodes
+$ kubectl label node <node-name-from-above> nodeType=edge
 ```
 
 4) View the current DaemonSets once again.
@@ -728,14 +739,14 @@ in this behavior.
 
 3) Query the DNS entry for the `app` service.
 ```
-$ kubectl exec sts-example-0 -- nslookup app.default.svc.cluster.local
+$ kubectl exec sts-example-0 -- nslookup app.<your-name>.svc.cluster.local
 ```
 An A record will have been returned for each instance of the StatefulSet. Querying the service directly will do
 simple DNS round-robin load-balancing.
 
 4) Finally, query one of instances directly.
 ```
-$ kubectl exec sts-example-0 -- nslookup sts-example-1.app.default.svc.cluster.local
+$ kubectl exec sts-example-0 -- nslookup sts-example-1.app.<your-name>.svc.cluster.local
 ```
 This is a unique feature to StatefulSets. This allows for services to directly interact with a specific instance
 of a Pod. If the Pod is updated and obtains a new IP, the DNS record will immediately point to it enabling consistent
