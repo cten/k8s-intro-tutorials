@@ -27,37 +27,6 @@ For this task we have Volumes, Persistent Volumes, Persistent Volume Claims, and
 
 ---
 
-# Before you Begin
-
-Minikube comes with a default storage class provisioner that can get in the way when trying to explore how storage
-is used within a Kubernetes cluster. For these exercises, it should be disabled.
-
-```
-$ minikube addons disable default-storageclass
-$ kubectl delete sc standard
-```
-
-**Attention Windows Users:** There is a  [known issue with minikube and enabling/disabling
-addons](https://github.com/kubernetes/minikube/issues/2281). If you encounter an error with the above command, execute
-the following:
-```
-$ minikube ssh 'sudo mv /etc/kubernetes/manifests/addon-manager.yaml /etc/kubernetes/addon-manager.yaml'
-$ kubectl delete pod storage-provisioner -n kube-system
-$ kubectl delete sc standard
-```
-
-
-When done, re-enabling the default-storageclass will automatically turn it back on.
-```
-$ minikube addons enable default-storageclass
-```
-or if you had to perform the windows workaround, execute this:
-```
-$ minikube ssh 'sudo mv /etc/kubernetes/addon-manager.yaml /etc/kubernetes/manifests/addon-manager.yaml'
-```
-
----
-
 # Volumes
 Volumes within Kubernetes are storage that is tied to the Pod’s lifecycle.
 
@@ -179,7 +148,7 @@ the multiple ways they may be selected.
 ---
 
 1) Create PV `pv-sc-example` from the manifest `manifests/pv-sc-example.yaml` or use the yaml below. Ensure to note
-that its labeled with `type=hostpath`, its Storage Class Name is set to `mypvsc`, and uses `Delete` for the Reclaim
+that its labeled with `type=hostpath`, its Storage Class Name is set to `mypvsc` (only in the README for example), and uses `Delete` for the Reclaim
 Policy.
 
 **manifests/pv-sc-example.yaml**
@@ -494,10 +463,20 @@ $ kubectl create -f manifests/reader.yaml
 ```
 $ kubectl proxy
 ```
+or
+```
+$ kubectl port-forward svc/reader 8999:80
+```
+
 **URL**
 ```
 http://127.0.0.1:8001/api/v1/namespaces/default/services/reader/proxy/
 ```
+or
+```
+http://127.0.0.1:8999
+```
+
 The `reader` Pods can reference the same Claim as the `writer` Pod. This is possible because the PV and PVC were
 created with the access mode `ReadWriteMany`.
 
@@ -542,22 +521,14 @@ via a Storage Class.
 
 ---
 
-1) Re-enable the minikube default-storageclass, and wait for it to become available
+1) You should see Storage Class `do-block-storage`
 ```
-$ minikube addons enable default-storageclass
-$ kubectl get sc --watch
+kubectl get storageclass
 ```
-or if you had to perform the windows workaround, execute this:
-```
-$ minikube ssh 'sudo mv /etc/kubernetes/addon-manager.yaml /etc/kubernetes/manifests/addon-manager.yaml'
-$ kubectl get sc --watch
-```
-
-You should see Storage Class `standard` become available after a few moments.
 
 2) Describe the new Storage Class
 ```
-$ kubectl describe sc standard
+$ kubectl describe sc do-block-storage
 ```
 Note the fields `IsDefaultClass`, `Provisioner`, and `ReclaimPolicy`. The `Provisioner` attribute references the
 _"driver"_ for the Storage Class. Minikube comes with it's own driver `k8s.io/minikube-hostpath` that simply mounts
