@@ -523,7 +523,7 @@ via a Storage Class.
 
 1) You should see Storage Class `do-block-storage`
 ```
-kubectl get storageclass
+$ kubectl get storageclass
 ```
 
 2) Describe the new Storage Class
@@ -531,8 +531,7 @@ kubectl get storageclass
 $ kubectl describe sc do-block-storage
 ```
 Note the fields `IsDefaultClass`, `Provisioner`, and `ReclaimPolicy`. The `Provisioner` attribute references the
-_"driver"_ for the Storage Class. Minikube comes with it's own driver `k8s.io/minikube-hostpath` that simply mounts
-a hostpath from within the VM as a Volume.
+_"driver"_ for the Storage Class.
 
 3) Create PVC `pvc-standard` from the manifest `manifests/pvc-standard.yaml` or use the yaml below.
 
@@ -545,7 +544,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: standard
+  storageClassName: do-block-storage
   resources:
     requests:
       storage: 1Gi
@@ -560,7 +559,7 @@ $ kubectl create -f manifests/pvc-standard.yaml
 ```
 $ kubectl describe pvc pvc-standard
 ```
-The `Events` lists the actions that occurred when the PVC was created. The external provisioner `standard` provisions
+The `Events` lists the actions that occurred when the PVC was created. The external provisioner `do-block-storage` provisions
 a Volume for the claim `default/pvc-standard` and is assigned the name `pvc-<pvc-standard uid>`.
 
 5) List the PVs.
